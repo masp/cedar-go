@@ -544,15 +544,26 @@ func entityLUBsRelated(a, b entityLUB) bool {
 
 // isEntityDescendant returns true if childType can be a descendant (member) of ancestorType.
 // This means childType lists ancestorType (directly or transitively) in its ParentTypes.
+//
+// The walk tracks visited types because the entity-type parent graph may
+// legitimately contain cycles: `entity Team in [Team, Application];` is valid
+// Cedar (the type-level memberOf relation is reflexive for hierarchical
+// types, even though the instance-level hierarchy must be acyclic).
 func (v *Validator) isEntityDescendant(childType, ancestorType types.EntityType) bool {
 	// Entity types always exist in the schema (validated during scope checking).
-	entity := v.schema.Entities[childType]
-	for _, parent := range entity.ParentTypes {
-		if parent == ancestorType {
-			return true
-		}
-		if v.isEntityDescendant(parent, ancestorType) {
-			return true
+	visited := map[types.EntityType]struct{}{childType: {}}
+	stack := []types.EntityType{childType}
+	for len(stack) > 0 {
+		current := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		for _, parent := range v.schema.Entities[current].ParentTypes {
+			if parent == ancestorType {
+				return true
+			}
+			if _, seen := visited[parent]; !seen {
+				visited[parent] = struct{}{}
+				stack = append(stack, parent)
+			}
 		}
 	}
 	return false

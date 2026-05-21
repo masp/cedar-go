@@ -1,0 +1,10 @@
+entity Application;
+entity Team in [Team, Application];
+entity User in [Team];
+entity Document;
+
+action "view" appliesTo {
+    principal: User,
+    resource: Document,
+    context: {},
+};

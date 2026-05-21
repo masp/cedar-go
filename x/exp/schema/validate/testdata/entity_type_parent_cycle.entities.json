@@ -1,0 +1,34 @@
+[
+    {
+        "uid": { "type": "Action", "id": "view" },
+        "attrs": {},
+        "parents": []
+    },
+    {
+        "uid": { "type": "Application", "id": "app" },
+        "attrs": {},
+        "parents": []
+    },
+    {
+        "uid": { "type": "Team", "id": "parent" },
+        "attrs": {},
+        "parents": [
+            { "type": "Application", "id": "app" }
+        ]
+    },
+    {
+        "uid": { "type": "Team", "id": "child" },
+        "attrs": {},
+        "parents": [
+            { "type": "Team", "id": "parent" },
+            { "type": "Application", "id": "app" }
+        ]
+    },
+    {
+        "uid": { "type": "User", "id": "alice" },
+        "attrs": {},
+        "parents": [
+            { "type": "Team", "id": "child" }
+        ]
+    }
+]

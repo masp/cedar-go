@@ -306,14 +306,28 @@ func (v *Validator) getActionsInSet(uids []types.EntityUID) []types.EntityUID {
 	return result
 }
 
+// isActionDescendant returns true if actionUID lists ancestorUID (directly or
+// transitively) in its parents.
+//
+// The walk tracks visited actions for the same reason as
+// Validator.isEntityDescendant. Cyclic action hierarchies are rejected at
+// schema resolution, so today this is defensive: it keeps the walk
+// terminating if a resolved schema is ever constructed without going through
+// Resolve.
 func (v *Validator) isActionDescendant(actionUID, ancestorUID types.EntityUID) bool {
-	action := v.schema.Actions[actionUID]
-	for parent := range action.Entity.Parents.All() {
-		if parent == ancestorUID {
-			return true
-		}
-		if v.isActionDescendant(parent, ancestorUID) {
-			return true
+	visited := map[types.EntityUID]struct{}{actionUID: {}}
+	stack := []types.EntityUID{actionUID}
+	for len(stack) > 0 {
+		current := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		for parent := range v.schema.Actions[current].Entity.Parents.All() {
+			if parent == ancestorUID {
+				return true
+			}
+			if _, seen := visited[parent]; !seen {
+				visited[parent] = struct{}{}
+				stack = append(stack, parent)
+			}
 		}
 	}
 	return false

@@ -1,0 +1,22 @@
+{
+  "policyValidation": {
+    "strict": true,
+    "permissive": true,
+    "perPolicy": {
+      "policy0": {
+        "strict": true,
+        "permissive": true
+      }
+    }
+  },
+  "entityValidation": {
+    "perEntity": {
+      "Action::view": {},
+      "Application::app": {},
+      "Team::parent": {},
+      "Team::child": {},
+      "User::alice": {}
+    }
+  },
+  "requestValidation": []
+}

@@ -1,0 +1,7 @@
+{
+    "schema": "testdata/entity_type_parent_cycle.cedarschema",
+    "policies": "testdata/entity_type_parent_cycle.cedar",
+    "shouldValidate": true,
+    "entities": "testdata/entity_type_parent_cycle.entities.json",
+    "requests": []
+}

@@ -5,7 +5,7 @@
             "name": 42,
             "age": 30,
             "active": true,
-            "buddy": { "type": "User", "id": "bob" },
+            "buddy": { "__entity": { "type": "User", "id": "bob" } },
             "scores": [1, 2]
         },
         "parents": []

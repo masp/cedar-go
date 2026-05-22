@@ -5,7 +5,7 @@
             "name": "Alice",
             "active": "not_bool",
             "age": 30,
-            "friend": { "type": "User", "id": "bob" }
+            "friend": { "__entity": { "type": "User", "id": "bob" } }
         },
         "parents": []
     }
